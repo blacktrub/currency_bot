@@ -2,6 +2,7 @@ import requests
 
 
 FIXER_URL = 'https://api.fixer.io/latest'
+BTC_API_URL = 'https://api.coinmarketcap.com/v1/ticker/'
 
 
 class ApiFixer:
@@ -22,3 +23,19 @@ class ApiFixer:
 
 
 currency_api = ApiFixer()
+
+
+class ApiBtc:
+    @staticmethod
+    def _request(attempts=3):
+        for _ in range(attempts):
+            response = requests.get(BTC_API_URL)
+            if response.ok:
+                return response.json()
+
+    def btc_to_usd(self):
+        data = self._request()
+        return [x for x in data if x['id'] == 'bitcoin']['price_usd']
+
+
+btc_api = ApiBtc()
