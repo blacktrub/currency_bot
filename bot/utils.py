@@ -35,7 +35,7 @@ class ApiBtc:
 
     def btc_to_usd(self):
         data = self._request()
-        return [x for x in data if x['id'] == 'bitcoin']['price_usd']
+        return [x for x in data if x['id'] == 'bitcoin'][0]['price_usd']
 
 
 btc_api = ApiBtc()
