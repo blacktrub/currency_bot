@@ -17,8 +17,10 @@ def cache(key):
             if not value:
                 value = func(*args, **kwargs)
                 r.set(key, value, ex=60)
+            else:
+                value = value.decode()
 
-            return str(value)
+            return value
         return wrapper
     return wrapped
 
