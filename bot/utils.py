@@ -18,7 +18,7 @@ def cache(key):
                 value = func(*args, **kwargs)
                 r.set(key, value, ex=60)
 
-            return value
+            return str(value)
         return wrapper
     return wrapped
 
