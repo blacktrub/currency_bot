@@ -19,3 +19,5 @@ And you already may run your bot:
 python bot/main.py
 ```
 > You can get a token from [BotFather](https://telegram.me/BotFather)
+
+Мяу
