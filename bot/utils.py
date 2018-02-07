@@ -8,19 +8,19 @@ FIXER_URL = 'https://api.fixer.io/latest'
 BTC_API_URL = 'https://api.coinmarketcap.com/v1/ticker/'
 
 
-def cache(func):
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        r = redis.StrictRedis()
-        key = kwargs.get('key')
+def cache(key):
+    def wrapped(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            r = redis.StrictRedis()
+            value = r.get(key)
+            if not value:
+                value = func(*args, **kwargs)
+                r.set(key, value, ex=60)
 
-        value = r.get(key)
-        if not value:
-            value = func(*args, **kwargs)
-            r.set(key, value, ex=60)
-
-        return value
-    return wrapper
+            return value
+        return wrapper
+    return wrapped
 
 
 class ApiFixer:
