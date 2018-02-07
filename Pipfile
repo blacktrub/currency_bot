@@ -9,6 +9,7 @@ name = "pypi"
 
 pytelegrambotapi = "*"
 requests = "*"
+redis = "*"
 
 
 [dev-packages]
