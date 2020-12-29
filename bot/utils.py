@@ -1,10 +1,11 @@
+import decimal
 import functools
 
 import requests
 import redis
 
 
-FIXER_URL = 'https://api.fixer.io/latest'
+FIXER_URL = 'https://api.exchangeratesapi.io/latest'
 BTC_API_URL = 'https://api.coinmarketcap.com/v1/ticker/'
 
 
@@ -25,6 +26,7 @@ def cache(key):
     return wrapped
 
 
+# TODO: not fixer, refactor me
 class ApiFixer:
     @staticmethod
     def _request(attempt=3, **params):
@@ -33,15 +35,19 @@ class ApiFixer:
             if response.ok:
                 return response.json()
 
+    @staticmethod
+    def fmt(val):
+        return decimal.Decimal(str(val)).quantize(decimal.Decimal('.00'))
+
     @cache('usd')
     def rub_to_usd(self):
-        data = self._request(base='usd')
-        return data['rates']['RUB']
+        data = self._request(base='USD')
+        return self.fmt(data['rates']['RUB'])
 
     @cache('eur')
     def rub_to_eur(self):
-        data = self._request(base='eur')
-        return data['rates']['RUB']
+        data = self._request(base='EUR')
+        return self.fmt(data['rates']['RUB'])
 
 
 currency_api = ApiFixer()
