@@ -5,7 +5,7 @@ import requests
 import redis
 
 
-FIXER_URL = 'https://api.exchangeratesapi.io/latest'
+RATES_API_URL = 'https://api.ratesapi.io/api/latest'
 BTC_API_URL = 'https://api.coinmarketcap.com/v1/ticker/'
 
 
@@ -26,12 +26,11 @@ def cache(key):
     return wrapped
 
 
-# TODO: not fixer, refactor me
-class ApiFixer:
+class CurrencyApi:
     @staticmethod
     def _request(attempt=3, **params):
         for _ in range(attempt):
-            response = requests.get(FIXER_URL, params=params)
+            response = requests.get(RATES_API_URL, params=params)
             if response.ok:
                 return response.json()
 
@@ -50,9 +49,6 @@ class ApiFixer:
         return self.fmt(data['rates']['RUB'])
 
 
-currency_api = ApiFixer()
-
-
 class ApiBtc:
     @staticmethod
     def _request(attempts=3):
@@ -67,4 +63,5 @@ class ApiBtc:
         return [x for x in data if x['id'] == 'bitcoin'][0]['price_usd']
 
 
+currency_api = CurrencyApi()
 btc_api = ApiBtc()
