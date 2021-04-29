@@ -6,7 +6,7 @@ import redis
 
 
 RATES_API_URL = 'https://api.ratesapi.io/api/latest'
-BTC_API_URL = 'https://api.coinmarketcap.com/v1/ticker/'
+BTC_API_URL = 'https://blockchain.info/ticker'
 
 
 def cache(key):
@@ -59,8 +59,7 @@ class ApiBtc:
 
     @cache('btc')
     def btc_to_usd(self):
-        data = self._request()
-        return [x for x in data if x['id'] == 'bitcoin'][0]['price_usd']
+        return self._request()['USD']['last']
 
 
 currency_api = CurrencyApi()
