@@ -26,5 +26,5 @@ jobs:
           script: |
             cd ~/bots/currency_bot
             echo "hello"
-            git pull
+            git pull https://github.com/blacktrub/currency_bot.git
 
