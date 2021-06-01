@@ -11,11 +11,7 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
     steps: 
-      - name: set ssh-agent
-        uses: webfactory/ssh-agent@v0.5.2
-        with: 
-          ssh-private-key: ${{ secrets.KEY }}
-      - name: multiple command
+      - name: Deploy bot
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
