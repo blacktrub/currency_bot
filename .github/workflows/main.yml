@@ -20,5 +20,5 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd ~/bots/currency_bot
-            git pull
+            echo "hello"
 
