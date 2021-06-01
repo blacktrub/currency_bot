@@ -20,6 +20,6 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd ~/bots/currency_bot
-            echo "hello"
             git pull https://github.com/blacktrub/currency_bot.git
+            pkill -f currency_bot
 
