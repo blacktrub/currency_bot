@@ -5,7 +5,9 @@ import requests
 import redis
 
 
-RATES_API_URL = 'https://api.ratesapi.io/api/latest'
+BASE_RATE_API_URL = 'https://www.cbr.ru/Queries/AjaxDataSource/'
+RATE_RUB_TO_USD_URL = '{}112805?DT=&val_id=R01235&_=1622572620145'.format(BASE_RATE_API_URL)
+RATE_RUB_TO_EUR_URL = '{}112805?DT=&val_id=R01239&_=1622572620146'.format(BASE_RATE_API_URL)
 BTC_API_URL = 'https://api.coingecko.com/api/v3/exchange_rates'
 
 
@@ -28,9 +30,9 @@ def cache(key):
 
 class CurrencyApi:
     @staticmethod
-    def _request(attempt=3, **params):
+    def _request(url, attempt=3, **params):
         for _ in range(attempt):
-            response = requests.get(RATES_API_URL, params=params)
+            response = requests.get(url, params=params)
             if response.ok:
                 return response.json()
 
@@ -40,13 +42,17 @@ class CurrencyApi:
 
     @cache('usd')
     def rub_to_usd(self):
-        data = self._request(base='USD')
-        return self.fmt(data['rates']['RUB'])
+        data = self._request(
+            RATE_RUB_TO_USD_URL
+        )
+        return data[0]['curs']
 
     @cache('eur')
     def rub_to_eur(self):
-        data = self._request(base='EUR')
-        return self.fmt(data['rates']['RUB'])
+        data = self._request(
+            RATE_RUB_TO_EUR_URL
+        )
+        return data[0]['curs']
 
 
 class ApiBtc:
